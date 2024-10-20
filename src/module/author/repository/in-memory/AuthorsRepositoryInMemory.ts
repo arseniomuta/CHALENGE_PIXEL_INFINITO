@@ -40,7 +40,7 @@ export class AuthorsRepositoryInMemory implements IAuthorRepository {
   }
 
   async authorDetail(name: string): Promise<Author | any> {
-    return this.authors
+    return this.authors.find((name) => name.name)
   }
 
   async updateAuthor({ authorId, nameUpdate }: IUpdateAuthorDTO): Promise<Author | any> {
