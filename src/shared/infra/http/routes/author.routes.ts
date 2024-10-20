@@ -5,6 +5,7 @@ import { DeleteAuthorController } from "../../../../module/author/useCase/delete
 import { AuthorDetailController } from "../../../../module/author/useCase/detailAuthor/AuthorDetailController";
 import { UpdateAuthorController } from "../../../../module/author/useCase/updateAuthor/UpdateAuthorController";
 import { RelationAuthorBookController } from "../../../../module/author/useCase/relationAuthorToBook/RelationAuthorToBookController";
+import { ensureAuthenticated } from "../midlleware/ensureAuthenticated";
 
 const createAuthorController = new CreateAuthorController()
 const listAuthorsController = new ListAuthorsController()
@@ -15,9 +16,9 @@ const relationAuthorToBookController = new RelationAuthorBookController()
 
 export const authorRoutes = Router()
 
-authorRoutes.post("/author", createAuthorController.handle)
-authorRoutes.get("/authors", listAuthorsController.handle)
-authorRoutes.delete("/author", deleteAuthorController.handle)
+authorRoutes.post("/author", ensureAuthenticated ,createAuthorController.handle)
+authorRoutes.get("/authors" ,listAuthorsController.handle)
+authorRoutes.delete("/author",  ensureAuthenticated ,deleteAuthorController.handle)
 authorRoutes.get("/authorDetail", authorDetailController.handle)
-authorRoutes.patch("/updateAuthor", authorUpdatedController.handle)
-authorRoutes.post("/relationAuthorBook", relationAuthorToBookController.handle)
+authorRoutes.patch("/updateAuthor",  ensureAuthenticated ,authorUpdatedController.handle)
+authorRoutes.post("/relationAuthorBook",  ensureAuthenticated ,relationAuthorToBookController.handle)

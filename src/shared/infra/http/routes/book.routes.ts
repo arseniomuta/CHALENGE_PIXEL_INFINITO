@@ -4,6 +4,7 @@ import { ListBooksController } from "../../../../module/book/useCases/listBooks/
 import { DeleteBookController } from "../../../../module/book/useCases/deleteBook/DeleteBooksController";
 import { BookDetailController } from "../../../../module/book/useCases/bookDetail/BookDetailController";
 import { UpdateBookController } from "../../../../module/book/useCases/updateBook/UpdateBookController";
+import { ensureAuthenticated } from "../midlleware/ensureAuthenticated";
 
 const createBookController = new CreateBookController()
 const listBooksController = new ListBooksController()
@@ -14,8 +15,8 @@ const updateBookController = new UpdateBookController()
 export const routeBook = Router();
 
 
-routeBook.post("/book", createBookController.handle)
-routeBook.get("/books", listBooksController.handle)
-routeBook.delete("/book", deleteBooksController.handle)
+routeBook.post("/book", ensureAuthenticated ,createBookController.handle)
+routeBook.get("/books" ,listBooksController.handle)
+routeBook.delete("/book",  ensureAuthenticated ,deleteBooksController.handle)
 routeBook.get("/bookDetail", detailBookController.handle)
-routeBook.patch("/updateBook", updateBookController.handle)
+routeBook.patch("/updateBook",  ensureAuthenticated ,updateBookController.handle)
