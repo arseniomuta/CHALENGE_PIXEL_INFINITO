@@ -19,7 +19,7 @@ export class CreateAuthorUseCase {
         const verifyIfAuthorAlreadyExists = await this.authorRepository.findAuthorByName(name)
 
         if(verifyIfAuthorAlreadyExists){
-            throw new AuthorAlreadyExistsError()
+           throw new AuthorAlreadyExistsError()
         }
 
         const author = await this.authorRepository.create({name})

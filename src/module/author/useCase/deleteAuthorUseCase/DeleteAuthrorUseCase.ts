@@ -14,6 +14,8 @@ export class DeleteAuthorUseCase {
     async execute(id: string) : Promise<Author | any> {
         const authorExists = await this.authorRepository.findById(id)
 
+        console.log("Yes", authorExists)
+
         if(!authorExists){
             throw new AuthorNotFoundError(id)
         }
