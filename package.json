@@ -5,7 +5,8 @@
   "scripts": {
     "start:dev": "tsx watch src/shared/infra/http/server.ts",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "vercel-build": "npx prisma generate && npx prisma migrate deploy"
   },
   "keywords": [],
   "author": "",
