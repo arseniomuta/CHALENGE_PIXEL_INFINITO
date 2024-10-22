@@ -5,7 +5,7 @@ import { AuthorNotFoundError } from "../../../../shared/errors/AuthorNotFound";
 
 export class DeleteAuthorController {
 
-    async handle(request: Request, response: Response): Promise<Response>{
+    async handle(request: Request, response: Response): Promise<Response | any>{
         const {id} = request.body
 
         if (!id) {

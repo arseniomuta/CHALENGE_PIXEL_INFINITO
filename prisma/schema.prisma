@@ -19,10 +19,11 @@ model Author {
 }
 
 model Book {
-  id      String           @id @default(uuid())
-  title   String
-  page    String
-  authors BooksOnAuthors[]
+  id       String           @id @default(uuid())
+  title    String
+  page     String
+  category String           @default("Sem categoria")
+  authors  BooksOnAuthors[]
 
   @@map("books")
 }

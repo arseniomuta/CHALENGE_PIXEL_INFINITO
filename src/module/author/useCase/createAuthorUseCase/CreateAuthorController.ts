@@ -5,7 +5,7 @@ import { AuthorAlreadyExistsError } from "../../../../shared/errors/AuthorAlread
 
 export class CreateAuthorController {
 
-    async handle(request: Request, response: Response): Promise<Response> {
+    async handle(request: Request, response: Response): Promise<Response | any> {
         const { name } = request.body;
 
         if (!name || typeof name !== 'string') {

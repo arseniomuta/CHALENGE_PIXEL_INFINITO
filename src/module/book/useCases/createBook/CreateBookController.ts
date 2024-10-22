@@ -7,7 +7,9 @@ import { BookAlreadyExistsError } from "../../../../shared/errors/BookAlreadyExi
 export class CreateBookController {
 
     async handle(request: Request, response: Response): Promise<Response>{
-        const {title, page} = request.body
+        const {title, page, category} = request.body
+        
+        //console.log("Title", title)
 
         if (!title || typeof title !== 'string') {
             return response.status(400).json({ message: "Titulo é obrigatório e deve ser uma string válida." });
@@ -20,8 +22,8 @@ export class CreateBookController {
         try {
 
             const createBookUseCase = container.resolve(CreateBookUseCase)
-            const bookCreated = await createBookUseCase.execute({title, page})
-
+            const bookCreated = await createBookUseCase.execute({title, page, category})
+            console.log("Book", bookCreated)
             return response.status(201).json({ 
                 message: "Autor criado com sucesso.",
                 bookCreated

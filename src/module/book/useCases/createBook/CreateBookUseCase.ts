@@ -7,6 +7,7 @@ import { BookAlreadyExistsError } from "../../../../shared/errors/BookAlreadyExi
 interface IRequest {
     title: string
     page: string
+    category: string
 }
 
 @injectable()
@@ -16,16 +17,20 @@ export class CreateBookUseCase {
         private booksRepository: IBooksRepository,
     ){}
 
-    async execute({title, page}: IRequest): Promise<Book>{
+    async execute({title, page, category}: IRequest): Promise<Book>{
+
+        //console.log("Title", title)
 
         const verifyIfBookAlreadyExists = await this.booksRepository.findBookByName(title)
+
+        //console.log(verifyIfBookAlreadyExists)
 
         if(verifyIfBookAlreadyExists){
             throw new BookAlreadyExistsError()
         }
 
-        const book = await this.booksRepository.createBook({title, page })
-
+        const book = await this.booksRepository.createBook({title, page , category})
+        
         return book
     }
 }

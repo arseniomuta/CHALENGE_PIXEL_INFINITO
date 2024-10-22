@@ -21,7 +21,7 @@ export class SessionAccountUserUseCase {
         private accountRepository: IAccountRepository
     ){}
 
-    async execute({email, password}: AccountUserCaseRequest): Promise<User | any>{
+    async execute({email, password}: AccountUserCaseRequest): Promise<AccountUserCaseResponse | null>{
         const user = await this.accountRepository.findUserByEmail(email)
 
         if(!user){
@@ -33,8 +33,6 @@ export class SessionAccountUserUseCase {
         if(!doesPasswordMatches){
             throw new Error("Password or E-mail wrong")
         }
-
-        user.password = null
 
         const token = sign({}, process.env.JWT_SECRET as string , {
             subject: user.id,
