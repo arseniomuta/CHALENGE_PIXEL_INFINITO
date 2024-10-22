@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "tsx watch src/shared/infra/http/server.ts",
+    "vercel-build": "npx prisma migrate deploy",
     "test": "vitest run",
     "test:watch": "vitest"
   },
