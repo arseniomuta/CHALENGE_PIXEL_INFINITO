@@ -9,7 +9,7 @@ export interface IUpdateBookDTO {
 export interface IBooksRepository {
     createBook(data: Prisma.BookCreateInput): Promise<Book>
     listBooks() : Promise<Book[]>
-    detailBook(title: string): Promise<Book | any>
+    detailBook(id: string): Promise<Book | any>
     deleteBook(id: string): Promise<null>
     findBookByName(title: string): Promise<Book | any>
     updateBook({bookId, titleUpdated, pageUpdated}: IUpdateBookDTO): Promise<Book | any>

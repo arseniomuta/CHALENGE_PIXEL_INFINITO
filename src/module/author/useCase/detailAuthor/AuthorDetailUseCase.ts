@@ -12,8 +12,8 @@ export class AuthorDetailUseCase {
         private authorRepository: IAuthorRepository
     ){}
 
-    async execute(name: string): Promise<Author | null>{
-        const authorDetail = await this.authorRepository.authorDetail(name)
+    async execute(id: string): Promise<Author | null>{
+        const authorDetail = await this.authorRepository.authorDetail(id)
 
         //console.log("Detail", authorDetail)
         if(!authorDetail){

@@ -47,11 +47,26 @@ export class PrismaAuthorRepository implements IAuthorRepository {
         return authorName
     }
 
-    async authorDetail(name: string): Promise<Author | null> {
-        const authorDetail = await prisma.author.findFirst({where: {name}, 
+    async authorDetail(id: string): Promise<Author | null> {
+        const authorDetail = await prisma.author.findUnique({
+            where: {
+                id: id
+            },
             include: {
-                books: true
-        }})
+                books: {
+                    select: {
+                        bookId: true,
+                        assignedAt: true,
+                        assignedBy: true,
+                        booK: {
+                            select: {
+                                title: true
+                            }
+                        }
+                    }
+                }
+            }
+        })
 
         return authorDetail
     }

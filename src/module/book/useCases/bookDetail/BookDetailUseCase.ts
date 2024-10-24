@@ -13,8 +13,8 @@ export class BookDetailUseCase {
         private booksRepository: IBooksRepository
     ){}
 
-    async execute(title: string): Promise<Book | any>{
-        const bookDetail = await this.booksRepository.detailBook(title)
+    async execute(id: string): Promise<Book | any>{
+        const bookDetail = await this.booksRepository.detailBook(id)
 
         if(!bookDetail){
             throw new BookNotFoundedError()

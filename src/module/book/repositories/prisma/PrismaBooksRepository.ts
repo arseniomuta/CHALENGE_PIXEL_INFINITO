@@ -20,13 +20,25 @@ export class PrismaBooksRepository implements IBooksRepository {
         })
     }
 
-    async detailBook(title: string): Promise<Book | any> {
-        const book = await prisma.book.findFirst({
+    async detailBook(id: string): Promise<Book | any> {
+        const book = await prisma.book.findUnique({
             where: {
-                title
+                id
             },
             include: {
-                authors: true
+                authors: {
+                    select: {
+                        authorId: true,
+                        assignedAt: true,
+                        assignedBy: true,
+
+                        author: {
+                            select: {
+                                name: true
+                            }
+                        }
+                    }
+                }
             }
         })
 

@@ -8,12 +8,12 @@ import { BookNotFoundedError } from "../../../../shared/errors/BookNotFounded"
 export class BookDetailController {
 
     async handle(request: Request, response: Response): Promise<Response>{
-        const {title} = request.params
+        const {id} = request.params
 
         try {
 
             const bookDetailUseCase = container.resolve(BookDetailUseCase)
-            const book = await bookDetailUseCase.execute(title)
+            const book = await bookDetailUseCase.execute(id)
 
             return response.status(200).json(book)
         }catch(err){

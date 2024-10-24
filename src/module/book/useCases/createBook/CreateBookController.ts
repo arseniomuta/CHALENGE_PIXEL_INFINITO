@@ -25,7 +25,7 @@ export class CreateBookController {
             const bookCreated = await createBookUseCase.execute({title, page, category})
             console.log("Book", bookCreated)
             return response.status(201).json({ 
-                message: "Autor criado com sucesso.",
+                message: "Livro criado com sucesso.",
                 bookCreated
             });
 

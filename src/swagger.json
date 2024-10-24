@@ -62,7 +62,7 @@
         }
       }
     },
-    "/authorDetail/{name}": {
+    "/authorDetail/{id}": {
       "get": {
         "summary": "Obtém detalhes de um autor pelo nome",
         "tags": ["Authors"],
@@ -180,7 +180,7 @@
         }
       }
     },
-    "/bookDetail/{title}": {
+    "/bookDetail/{id}": {
       "get": {
         "summary": "Obtém detalhes de um livro pelo título",
         "tags": ["Books"],

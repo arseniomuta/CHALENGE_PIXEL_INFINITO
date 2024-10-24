@@ -7,16 +7,16 @@ import { AuthorNotExistsError } from "../../../../shared/errors/AuthorNotExists"
 export class AuthorDetailController {
 
     async handle(request: Request, response: Response): Promise<Response>{
-        const {name} = request.params
+        const {id} = request.params
 
-        if (!name) {
+        if (!id) {
             return response.status(400).json({ message: "O author é obrigatório" });
         }
 
         try{
             const authorDetailUseCase = container.resolve(AuthorDetailUseCase)
 
-            const authorDetail = await authorDetailUseCase.execute(name)
+            const authorDetail = await authorDetailUseCase.execute(id)
 
             return response.status(200).json(authorDetail)            
         }catch(err){
