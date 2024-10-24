@@ -3,50 +3,14 @@
   "info": {
     "title": "Bookstore Management API",
     "version": "1.0.0",
-    "description": "API para gerenciamento de autores, livros e usuários em uma livraria."
+    "description": "API para gerenciar autores, livros e usuários em uma livraria."
   },
-  "servers": [
-    {
-      "url": "http://localhost:3000/api",
-      "description": "Servidor local"
-    }
-  ],
-  "components": {
-    "securitySchemes": {
-      "BearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
-    }
-  },
-  "security": [
-    {
-      "BearerAuth": []
-    }
-  ],
   "paths": {
-    "/authors": {
-      "get": {
-        "summary": "Lista todos os autores",
-        "responses": {
-          "200": {
-            "description": "Lista de autores",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Author"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
+    "/author": {
       "post": {
         "summary": "Cria um novo autor",
+        "security": [{ "bearerAuth": [] }],
+        "tags": ["Authors"],
         "requestBody": {
           "required": true,
           "content": {
@@ -54,237 +18,192 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": {
-                    "type": "string"
-                  }
+                  "name": { "type": "string" },
+                  "birthdate": { "type": "string", "format": "date" },
+                  "biography": { "type": "string" }
                 },
-                "example": {
-                  "name": "author test"
-                }
+                "required": ["name", "birthdate"]
               }
             }
           }
         },
         "responses": {
-          "201": {
-            "description": "Autor criado com sucesso"
+          "201": { "description": "Autor criado com sucesso" }
+        }
+      }
+    },
+    "/authors": {
+      "get": {
+        "summary": "Lista todos os autores",
+        "tags": ["Authors"],
+        "responses": {
+          "200": {
+            "description": "Lista de autores",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Author" } }
+              }
+            }
           }
         }
       }
     },
-    "/authors/{id}": {
-      "get": {
-        "summary": "Obtém um autor específico",
+    "/author/{id}": {
+      "delete": {
+        "summary": "Exclui um autor pelo ID",
+        "security": [{ "bearerAuth": [] }],
+        "tags": ["Authors"],
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Autor excluído com sucesso" },
+          "404": { "description": "Autor não encontrado" }
+        }
+      }
+    },
+    "/authorDetail/{name}": {
+      "get": {
+        "summary": "Obtém detalhes de um autor pelo nome",
+        "tags": ["Authors"],
+        "parameters": [
+          { "name": "name", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
         "responses": {
           "200": {
-            "description": "Autor encontrado",
+            "description": "Detalhes do autor",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Author"
-                }
+                "schema": { "$ref": "#/components/schemas/Author" }
               }
             }
           },
-          "404": {
-            "description": "Autor não encontrado"
-          }
+          "404": { "description": "Autor não encontrado" }
         }
-      },
-      "put": {
-        "summary": "Atualiza um autor",
+      }
+    },
+    "/updateAuthor/{authorId}": {
+      "patch": {
+        "summary": "Atualiza os dados de um autor",
+        "security": [{ "bearerAuth": [] }],
+        "tags": ["Authors"],
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+          { "name": "authorId", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Author"
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "birthdate": { "type": "string", "format": "date" },
+                  "biography": { "type": "string" }
+                }
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": "Autor atualizado com sucesso"
-          }
+          "200": { "description": "Autor atualizado com sucesso" },
+          "404": { "description": "Autor não encontrado" }
         }
-      },
-      "delete": {
-        "summary": "Exclui um autor",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
+      }
+    },
+    "/relationAuthorBook": {
+      "post": {
+        "summary": "Relaciona um autor a um livro",
+        "security": [{ "bearerAuth": [] }],
+        "tags": ["Authors"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "authorId": { "type": "string" },
+                  "bookId": { "type": "string" },
+                  "assignedBy": { "type": "string" }
+                },
+                "required": ["authorId", "bookId", "assignedBy"]
+              }
             }
           }
-        ],
+        },
         "responses": {
-          "204": {
-            "description": "Autor excluído com sucesso"
+          "200": { "description": "Relacionamento criado com sucesso" },
+          "404": { "description": "Autor ou Livro não encontrado" }
+        }
+      }
+    },
+    "/book": {
+      "post": {
+        "summary": "Cria um novo livro",
+        "security": [{ "bearerAuth": [] }],
+        "tags": ["Books"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "isbn": { "type": "string" },
+                  "publishedDate": { "type": "string", "format": "date" }
+                },
+                "required": ["title", "isbn"]
+              }
+            }
           }
+        },
+        "responses": {
+          "201": { "description": "Livro criado com sucesso" }
         }
       }
     },
     "/books": {
       "get": {
         "summary": "Lista todos os livros",
+        "tags": ["Books"],
         "responses": {
           "200": {
             "description": "Lista de livros",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Book"
-                  }
-                }
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Book" } }
               }
             }
-          }
-        }
-      },
-      "post": {
-        "summary": "Cria um novo livro",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Book"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Livro criado com sucesso"
           }
         }
       }
     },
-    "/books/{id}": {
+    "/bookDetail/{title}": {
       "get": {
-        "summary": "Obtém um livro específico",
+        "summary": "Obtém detalhes de um livro pelo título",
+        "tags": ["Books"],
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+          { "name": "title", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
         "responses": {
           "200": {
-            "description": "Livro encontrado",
+            "description": "Detalhes do livro",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Book"
-                }
+                "schema": { "$ref": "#/components/schemas/Book" }
               }
             }
           },
-          "404": {
-            "description": "Livro não encontrado"
-          }
-        }
-      },
-      "put": {
-        "summary": "Atualiza um livro",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Book"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Livro atualizado com sucesso"
-          }
-        }
-      },
-      "delete": {
-        "summary": "Exclui um livro",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Livro excluído com sucesso"
-          }
+          "404": { "description": "Livro não encontrado" }
         }
       }
     },
-    "/users/register": {
+    "/user": {
       "post": {
-        "summary": "Registra um novo usuário",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Usuário registrado com sucesso"
-          }
-        }
-      }
-    },
-    "/users/login": {
-      "post": {
-        "summary": "Faz login e obtém um token",
+        "summary": "Cria um novo usuário",
+        "tags": ["Users"],
         "requestBody": {
           "required": true,
           "content": {
@@ -292,30 +211,45 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": {
-                    "type": "string"
-                  },
-                  "password": {
-                    "type": "string"
-                  }
-                }
+                  "name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                },
+                "required": ["name", "email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Usuário criado com sucesso" }
+        }
+      }
+    },
+    "/session": {
+      "post": {
+        "summary": "Autentica um usuário",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                },
+                "required": ["email", "password"]
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Login bem-sucedido, retorna o token JWT",
+            "description": "Login bem-sucedido",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "token": {
-                      "type": "string"
-                    }
-                  }
-                }
+                "schema": { "$ref": "#/components/schemas/User" }
               }
             }
           }
@@ -328,44 +262,36 @@
       "Author": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          }
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "birthdate": { "type": "string", "format": "date" },
+          "biography": { "type": "string" }
         }
       },
       "Book": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "authorIds": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "isbn": { "type": "string" },
+          "publishedDate": { "type": "string", "format": "date" }
         }
       },
       "User": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          }
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "password": { "type": "string" }
         }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
