@@ -6,7 +6,8 @@ import { UpdateBookUseCase } from "./UpdateBookUseCase";
 export class UpdateBookController {
 
   async handle(request: Request, response: Response):Promise<Response>{
-    const {bookId, titleUpdated, pageUpdated} = request.body
+    const {titleUpdated, pageUpdated} = request.body
+    const {bookId} = request.params
 
     const updateBookUseCase = container.resolve(UpdateBookUseCase)
 

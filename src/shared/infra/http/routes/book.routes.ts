@@ -17,6 +17,6 @@ export const routeBook = Router();
 
 routeBook.post("/book", ensureAuthenticated ,createBookController.handle)
 routeBook.get("/books" ,listBooksController.handle)
-routeBook.delete("/book",  ensureAuthenticated ,deleteBooksController.handle)
-routeBook.get("/bookDetail", detailBookController.handle)
-routeBook.patch("/updateBook",  ensureAuthenticated ,updateBookController.handle)
+routeBook.delete("/book/:id",  ensureAuthenticated ,deleteBooksController.handle)
+routeBook.get("/bookDetail/:title", detailBookController.handle)
+routeBook.patch("/updateBook/:id",  ensureAuthenticated ,updateBookController.handle)

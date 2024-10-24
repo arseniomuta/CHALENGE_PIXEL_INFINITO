@@ -6,7 +6,8 @@ import { UpdateAuthorUseCase } from "./UpdateAuthorUseCase"
 export class UpdateAuthorController {
 
   async handle(request: Request, response: Response) :Promise<Response>{
-    const {authorId, nameUpdate} = request.body
+    const {nameUpdate} = request.body
+    const {authorId} = request.params
 
     const updateAuthorUseCase = container.resolve(UpdateAuthorUseCase)
 

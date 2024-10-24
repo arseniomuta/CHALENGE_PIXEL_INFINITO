@@ -200,6 +200,49 @@
         }
       }
     },
+    "/updateBook/{id}": {
+      "patch": {
+        "summary": "Atualiza os dados de um book",
+        "security": [{ "bearerAuth": [] }],
+        "tags": ["Books"],
+        "parameters": [
+            { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+          ],
+         "requestBody": {
+            "required": true,
+            "content": {
+            "application/json": {
+            "schema": {
+            "type": "object",
+            "properties": {
+            "name": { "type": "string" },
+            "birthdate": { "type": "string", "format": "date" },
+            "biography": { "type": "string" }
+          }
+      }
+    }
+  }
+},
+  "responses": {
+      "200": { "description": "Book atualizado com sucesso" },
+      "404": { "description": "Book não encontrado" }
+      }
+      }
+    },
+    "/book/{id}": {
+      "delete": {
+        "summary": "Deletar um livro por pelo ID",
+        "security": [{ "bearerAuth": [] }],
+        "tags": ["Books"],
+        "parameters": [
+              { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+          ],
+        "responses": {
+              "200": { "description": "Book excluído com sucesso" },
+              "404": { "description": "Book não encontrado" }
+            }
+      }
+    },
     "/user": {
       "post": {
         "summary": "Cria um novo usuário",
