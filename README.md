@@ -18,6 +18,7 @@ Esta API permite gerenciar uma livraria, incluindo funcionalidades para gerencia
     - Node.js: Ambiente de execução JavaScript para construir a API.
     - Express: Framework web para rotas e middleware.
     - Prisma ORM: Mapeador objeto-relacional para interações com o banco de dados.
+    - SQLITE: Como banco de dados
     - TSyringe: Contêiner de injeção de dependências para TypeScript.
     - JWT: JSON Web Token para autenticação e proteção de rotas.
 
@@ -30,30 +31,59 @@ Esta API permite gerenciar uma livraria, incluindo funcionalidades para gerencia
 
 
   ### Instalação
-  - Clone o repositório:
-
-  ### Copiar código
-  - git clone https://github.com/seu-usuario/bookstore-api.git
-  - Navegue até o diretório do projeto:
-  - cd bookstore-api
+    - Clone o repositório:
+    - git clone https://github.com/seu-usuario/bookstore-api.git
+    
+    - Navegue até o diretório do projeto:
+    - cd bookstore-api
     
   ### Instale as dependências:
     - npm install
     - Configure o arquivo .env com suas variáveis de ambiente. Por exemplo:
 
-  
+    - DATABASE_URL=sua-url-do-banco-de-dados
+    JWT_SECRET=sua-chave-secreta
+    
+  ### Execute as migrações do Prisma para configurar o esquema do banco de dados:
+    - Copiar código
+    - npx prisma migrate dev
+    
+  ### Inicie a aplicação:
+    - npm run dev
+  ### Uso
+  ### Autenticação
+      Algumas rotas são protegidas e exigem um token JWT válido para acessá-las. Para obter um token, você deve primeiro criar um usuário e fazer login.
+      
+  ### Endpoints de Autor
 
-  - DATABASE_URL=sua-url-do-banco-de-dados
-JWT_SECRET=sua-chave-secreta
-Execute as migrações do Prisma para configurar o esquema do banco de dados:
+      | Método  | Endpoint             | Descrição                                  | Autenticação Necessária |
+      |---------|----------------------|--------------------------------------------|-------------------------|
+      | GET     | /authors             | Lista todos os autores                     | Não                     |
+      | GET     | /authorDetail/:name  | Busca um autor específico pelo ID          | Não                     |
+      | POST    | /author              | Cria um novo autor                         | Sim                     |
+      | PATCH   | /updateAuthor/:id    | Atualiza um autor específico pelo ID       | Sim                     |
+      | DELETE  | /author/:id          | Remove um autor específico pelo ID         | Sim                     |
+      | POST    | /relationAuthorBook  | Relaciona um author a um livro             | Sim                     |
 
-bash
-Copiar código
-npx prisma migrate dev
-Inicie a aplicação:
+  ### Livro Endpoints
 
-bash
-Copiar código
-npm run dev
-Uso
-Autenticação
+      | Método  | Endpoint              | Descrição                                  | Autenticação Necessária |
+      |---------|-----------------------|--------------------------------------------|-------------------------|
+      | GET     | /books                | Lista todos os livros                      | Não                     |
+      | GET     | /book/:id             | Busca um livro específico pelo ID          | Não                     |
+      | POST    | /book                 | Cria um novo livro                         | Sim                     |
+      | PATCH   | /book/:id             | Atualiza um livro específico pelo ID       | Sim                     |
+      | DELETE  | /book/:id             | Remove um livro específico pelo ID         | Sim                     |
+
+  ### Endpoints de Usuário
+
+      | Método  | Endpoint              | Descrição                                  | Autenticação Necessária |
+      |---------|-----------------------|--------------------------------------------|-------------------------|
+      | POST    | /user                 | Cria um novo usuário (registro)            | Não                     |
+      | POST    | /session              | Autentica um usuário (login)               | Não                     |
+
+  ### Gerenciamento de Relacionamentos
+      Livros e autores têm um relacionamento de muitos-para-muitos. Ao criar ou atualizar livros, você pode associá-los a múltiplos autores, e vice-versa.
+
+  ### Executando Testes
+      npm run test
